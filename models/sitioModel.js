@@ -40,12 +40,12 @@ const SitioSchema = Schema({
     servicios: [{
         type: String
     }],
-    horarioOpen: {
+    horarioOpen: [{
         type: String
-    },
-    horarioClose: {
+    }],
+    horarioClose: [{
         type: String
-    },
+    }],
     ubicacion: {
         type: String
     },

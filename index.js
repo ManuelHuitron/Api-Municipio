@@ -4,6 +4,7 @@ const express = require('express');
 //importamos el cors
 const cors = require('cors');
 
+const path = require('path');
 
 //Crear el servidor de Express
 const app = express();
@@ -27,9 +28,13 @@ app.use('/api/evento', require('./routes/eventoRoute'));
 app.use('/api/producto', require('./routes/productoRoute'));
 app.use('/api/taller', require('./routes/tallerRoute'));
 
-
+app.get( '*', (req, res) => {
+    res.sendFile(path.resolve( __dirname, 'public/index.html'));
+});
 
 //app.listen(process.env.PORT);
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto: ' + process.env.PORT)
 });
+
+
