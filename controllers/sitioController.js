@@ -46,7 +46,9 @@ const getSitioByID = async(req, res = response) => {
         res.json({
             ok: true,
             sitio: sitioBD,
-            servicios: sitioBD.servicios
+            servicios: sitioBD.servicios,
+            horarioOpen: sitioBD.horarioOpen,
+            horarioClose: sitioBD.horarioClose
         });
 
     } catch (error) {
