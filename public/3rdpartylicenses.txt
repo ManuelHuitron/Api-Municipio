@@ -91,6 +91,9 @@ MIT
 @angular/router
 MIT
 
+@kolkov/angular-editor
+MIT
+
 css-loader
 MIT
 Copyright JS Foundation and other contributors
