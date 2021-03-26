@@ -114,8 +114,6 @@ const getEventoByNombre = async (req, res = response) => {
 //Get by sitio
 const getEventoBySitio = async (req, res = response) => {
     const sitio = req.params.sitio;
-
-
     let data = [];
 
     try {
@@ -123,7 +121,7 @@ const getEventoBySitio = async (req, res = response) => {
         .populate({
             path: 'uid',
             select: 'nombreSitio'
-        })
+        }).lean()
     } catch (error) {       
         return res.status(400).json({
             ok: false,
