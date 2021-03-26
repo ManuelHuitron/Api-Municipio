@@ -30,6 +30,7 @@ const getEvento = async (req, res = response) => {
         })
     }
 }
+
 const getEventoByID = async (req, res = response) => {
     const uid = req.params.id;
 
@@ -56,6 +57,38 @@ const getEventoByID = async (req, res = response) => {
         })
     }
 }
+
+
+const getPopulateByID = async (req, res = response) => {
+    const uid = req.params.id;
+
+    try {
+        const eventoBD = await Evento.findById(uid).populate({
+            path: 'uid',
+            select: 'nombreEvento'
+        }).lean()
+
+        if (!eventoBD) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'El Evento no existe'
+            });
+        }
+
+        res.json({
+            ok: true,
+            evento: eventoBD
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        })
+    }
+}
+
 const getEventoByNombre = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, 'i');
@@ -87,15 +120,18 @@ const getEventoBySitio = async (req, res = response) => {
 
     try {
         data = await Evento.find({ sitio })
-    } catch (error) {
-
+        .populate({
+            path: 'uid',
+            select: 'nombreSitio'
+        })
+    } catch (error) {       
         return res.status(400).json({
             ok: false,
             msg: 'La tabla tiene que ser usuarios'
         });
     }
 
-
+    console.log(' AQUI',data);
     res.json({
         ok: true,
         resultados: data
@@ -348,5 +384,6 @@ module.exports = {
     getEventoByNombre,
     getEventoBySitio,
     getEventoBySitioPaginado,
-    getEventoByTalentPaginado
+    getEventoByTalentPaginado,
+    getPopulateByID
 }
