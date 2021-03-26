@@ -35,8 +35,9 @@ const getEventoByID = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
-        const eventoBD = await Evento.findById(uid);
-
+        const eventoBD = await Evento.findById(uid)
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
         if (!eventoBD) {
             return res.status(404).json({
                 ok: false,
@@ -59,35 +60,6 @@ const getEventoByID = async (req, res = response) => {
 }
 
 
-const getPopulateByID = async (req, res = response) => {
-    const uid = req.params.id;
-
-    try {
-        const eventoBD = await Evento.findById(uid).populate({
-            path: 'uid',
-            select: 'nombreEvento'
-        }).lean()
-
-        if (!eventoBD) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'El Evento no existe'
-            });
-        }
-
-        res.json({
-            ok: true,
-            evento: eventoBD
-        });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el administrador'
-        })
-    }
-}
 
 const getEventoByNombre = async (req, res = response) => {
     const busqueda = req.params.busqueda;
@@ -97,6 +69,8 @@ const getEventoByNombre = async (req, res = response) => {
 
     try {
         data = await Evento.find({ nombreEvento: regex })
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({
@@ -111,6 +85,8 @@ const getEventoByNombre = async (req, res = response) => {
         resultados: data
     })
 }
+
+
 //Get by sitio
 const getEventoBySitio = async (req, res = response) => {
     const sitio = req.params.sitio;
@@ -118,23 +94,24 @@ const getEventoBySitio = async (req, res = response) => {
 
     try {
         data = await Evento.find({ sitio })
-        .populate({
-            path: 'uid',
-            select: 'nombreSitio'
-        }).lean()
-    } catch (error) {       
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+
+    } catch (error) {
         return res.status(400).json({
             ok: false,
             msg: 'La tabla tiene que ser usuarios'
         });
     }
 
-    console.log(' AQUI',data);
+
     res.json({
         ok: true,
         resultados: data
     })
 }
+
+
+
 
 //Get by sitio paginado
 const getEventoBySitioPaginado = async (req, res = response) => {
@@ -383,5 +360,4 @@ module.exports = {
     getEventoBySitio,
     getEventoBySitioPaginado,
     getEventoByTalentPaginado,
-    getPopulateByID
 }

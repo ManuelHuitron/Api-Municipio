@@ -97,7 +97,9 @@ const getProductoByID = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
-        const productoBD = await Producto.findById(uid);
+        const productoBD = await Producto.findById(uid)
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
 
         if (!productoBD) {
             return res.status(404).json({
@@ -128,6 +130,8 @@ const getProductoByNombre = async (req, res = response) => {
 
     try {
         data = await Producto.find({ nombreProducto: regex })
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({
@@ -151,6 +155,7 @@ const getProductoBySitio = async (req, res = response) => {
 
     try {
         data = await Producto.find({ sitio })
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({

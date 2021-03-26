@@ -34,7 +34,7 @@ const getTalentByID = async(req, res = response) => {
     const uid = req.params.id;
 
     try {
-        const talentBD = await Talent.findById(uid);
+        const talentBD = await Talent.findById(uid)
 
         if (!talentBD) {
             return res.status(404).json({
@@ -64,6 +64,7 @@ const getTalentByNombre = async(req, res = response) => {
 
     try {
         data = await Talent.find({ nombreTalent: regex })
+
     } catch (error) {
 
         return res.status(400).json({

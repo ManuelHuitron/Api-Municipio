@@ -98,7 +98,9 @@ const getTallerByID = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
-        const tallerBD = await Taller.findById(uid);
+        const tallerBD = await Taller.findById(uid)
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
 
         if (!tallerBD) {
             return res.status(404).json({
@@ -129,6 +131,8 @@ const getTallerByNombre = async (req, res = response) => {
 
     try {
         data = await Taller.find({ nombreTaller: regex })
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({
@@ -151,6 +155,7 @@ const getTallerBySitio = async (req, res = response) => {
 
     try {
         data = await Taller.find({ sitio })
+        .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({
