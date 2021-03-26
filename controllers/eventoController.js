@@ -9,6 +9,8 @@ const getEvento = async (req, res = response) => {
         const [eventos, total] = await Promise.all([
             Evento
                 .find({})
+                .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(5),
 
@@ -121,10 +123,11 @@ const getEventoBySitioPaginado = async (req, res = response) => {
 
     try {
         data = await Evento.find({ sitio })
-            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+
         const [eventos, total] = await Promise.all([
             Evento
                 .find({ sitio })
+                .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(4),
 
@@ -154,10 +157,11 @@ const getEventoByTalentPaginado = async (req, res = response) => {
         const [eventos, total] = await Promise.all([
             Evento
                 .find({ talent })
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(4),
 
-            Evento.find({ talent }).countDocuments().populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
+            Evento.find({ talent }).countDocuments()
 
         ]);
 

@@ -12,10 +12,11 @@ const getProductoBySitioPAginado = async (req, res = response) => {
         const [productos, total] = await Promise.all([
             Producto
                 .find({ sitio })
+                .populate('sitio')
                 .skip(desde)
                 .limit(4),
 
-            Producto.find({ sitio }).countDocuments().populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            Producto.find({ sitio }).countDocuments()
         ]);
 
         res.json({
@@ -43,9 +44,10 @@ const getProductoByTalentPaginado = async (req, res = response) => {
         const [productos, total] = await Promise.all([
             Producto
                 .find({ talent })
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(4),
-            Producto.find({ talent }).countDocuments().populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
+            Producto.find({ talent }).countDocuments()
         ]);
         res.json({
             ok: true,
@@ -71,6 +73,8 @@ const getProducto = async (req, res = response) => {
         const [productos, total] = await Promise.all([
             Producto
                 .find({})
+                .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(5),
 

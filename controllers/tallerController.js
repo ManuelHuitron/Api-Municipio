@@ -9,6 +9,8 @@ const getTaller = async (req, res = response) => {
         const [talleres, total] = await Promise.all([
             Taller
                 .find({})
+                .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(5),
 
@@ -40,11 +42,12 @@ const getTallerByTalentPaginado = async (req, res = response) => {
         const [talleres, total] = await Promise.all([
             Taller
                 .find({ talent })
+                .populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(4),
 
 
-            Taller.find({ talent }).countDocuments().populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
+            Taller.find({ talent }).countDocuments()
 
         ]);
 
@@ -72,10 +75,11 @@ const getTallerBySitioPaginado = async (req, res = response) => {
         const [talleres, total] = await Promise.all([
             Taller
                 .find({ sitio })
+                .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
                 .skip(desde)
                 .limit(4),
 
-            Taller.find({ sitio }).countDocuments().populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            Taller.find({ sitio }).countDocuments()
         ]);
 
         res.json({
