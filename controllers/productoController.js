@@ -15,7 +15,7 @@ const getProductoBySitioPAginado = async (req, res = response) => {
                 .skip(desde)
                 .limit(4),
 
-            Producto.find({ sitio }).countDocuments()
+            Producto.find({ sitio }).countDocuments().populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
         ]);
 
         res.json({
@@ -45,7 +45,7 @@ const getProductoByTalentPaginado = async (req, res = response) => {
                 .find({ talent })
                 .skip(desde)
                 .limit(4),
-            Producto.find({ talent }).countDocuments()
+            Producto.find({ talent }).countDocuments().populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
         ]);
         res.json({
             ok: true,

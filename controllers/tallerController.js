@@ -44,7 +44,7 @@ const getTallerByTalentPaginado = async (req, res = response) => {
                 .limit(4),
 
 
-            Taller.find({ talent }).countDocuments()
+            Taller.find({ talent }).countDocuments().populate('talent', 'nombreTalent _id nombreContacto1 telContacto1 correoContacto1')
 
         ]);
 
@@ -75,7 +75,7 @@ const getTallerBySitioPaginado = async (req, res = response) => {
                 .skip(desde)
                 .limit(4),
 
-            Taller.find({ sitio }).countDocuments()
+            Taller.find({ sitio }).countDocuments().populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
         ]);
 
         res.json({
@@ -155,7 +155,7 @@ const getTallerBySitio = async (req, res = response) => {
 
     try {
         data = await Taller.find({ sitio })
-        .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
+            .populate('sitio', 'nombreSitio _id nombreContacto1 telContacto1 correoContacto1')
     } catch (error) {
 
         return res.status(400).json({
