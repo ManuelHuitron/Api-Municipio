@@ -27,6 +27,8 @@ app.use('/api/talent', require('./routes/talentRoute'));
 app.use('/api/evento', require('./routes/eventoRoute'));
 app.use('/api/producto', require('./routes/productoRoute'));
 app.use('/api/taller', require('./routes/tallerRoute'));
+app.use('/api/busqueda', require('./routes/busquedaRoute'));
+app.use('/api/comentario', require('./routes/comentariosRoute'));
 
 app.get( '*', (req, res) => {
     res.sendFile(path.resolve( __dirname, 'public/index.html'));

@@ -2,15 +2,15 @@ const { response } = require('express');
 const Sitio = require('../models/sitioModel');
 
 //Metodo de eliminar un sitio
-const getSitio = async(req, res = response) => {
+const getSitio = async (req, res = response) => {
     try {
         const desde = Number(req.query.desde) || 0;
 
         const [sitios, total] = await Promise.all([
             Sitio
-            .find({})
-            .skip(desde)
-            .limit(5),
+                .find({})
+                .skip(desde)
+                .limit(5),
 
             Sitio.countDocuments()
         ]);
@@ -30,7 +30,7 @@ const getSitio = async(req, res = response) => {
         })
     }
 }
-const getSitioByID = async(req, res = response) => {
+const getSitioByID = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -59,7 +59,7 @@ const getSitioByID = async(req, res = response) => {
         })
     }
 }
-const getSitioByNombre = async(req, res = response) => {
+const getSitioByNombre = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, 'i');
 
@@ -82,7 +82,7 @@ const getSitioByNombre = async(req, res = response) => {
     })
 }
 
-const getSitioByUser = async(req, res = response) => {
+const getSitioByUser = async (req, res = response) => {
 
     const usuario = req.params.usuario;
 
@@ -108,41 +108,41 @@ const getSitioByUser = async(req, res = response) => {
 }
 
 //Metodo para crear un Sitio
-const crearSitio = async(req, res = response) => {
-        //lectura del body
-        const { nombreSitio } = req.body;
+const crearSitio = async (req, res = response) => {
+    //lectura del body
+    const { nombreSitio } = req.body;
 
-        try {
-            //verificando si existe un Sitio registrado
-            const existeSitio = await Sitio.findOne({ nombreSitio });
-            //validacion en caso que el Sitio ya este registrado
-            if (existeSitio) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'El Sitio ya está registrado'
-                });
-            }
-
-            const sitioBD = new Sitio(req.body);
-
-            // Guardar usuario
-            await sitioBD.save();
-
-            res.json({
-                ok: true,
-                sitio: sitioBD
-            });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({
+    try {
+        //verificando si existe un Sitio registrado
+        const existeSitio = await Sitio.findOne({ nombreSitio });
+        //validacion en caso que el Sitio ya este registrado
+        if (existeSitio) {
+            return res.status(400).json({
                 ok: false,
-                msg: 'Error inesperado... revisar logs'
+                msg: 'El Sitio ya está registrado'
             });
         }
+
+        const sitioBD = new Sitio(req.body);
+
+        // Guardar usuario
+        await sitioBD.save();
+
+        res.json({
+            ok: true,
+            sitio: sitioBD
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado... revisar logs'
+        });
     }
-    //Metodo de eliminar un sitio
-const actualizarSitio = async(req, res = response) => {
+}
+//Metodo de eliminar un sitio
+const actualizarSitio = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -193,7 +193,7 @@ const actualizarSitio = async(req, res = response) => {
  * @param {*} req 
  * @param {*} res 
  */
-const actualizarLicenciaSitio = async(req, res = response) => {
+const actualizarLicenciaSitio = async (req, res = response) => {
     const uid = req.params.id;
     console.log(req.body);
 
@@ -242,7 +242,7 @@ const actualizarLicenciaSitio = async(req, res = response) => {
 
 
 //Metodo de eliminar un sitio
-const borrarSitio = async(req, res = response) => {
+const borrarSitio = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -274,6 +274,51 @@ const borrarSitio = async(req, res = response) => {
     }
 }
 
+
+//para la app
+//GEt Sitio by categoria
+const getSitioByCategoria = async (req, res = response) => {
+
+    const categoria = req.params.categoria;
+    const desde = Number(req.query.desde) || 0;
+
+    const fecha = new Date();
+
+    let data = [];
+    let dtoValidos = [];
+    let total = 0;
+    let vuelta = 0;
+
+    try {
+        this.total = await Sitio.find({ categoria }).countDocuments();
+        this.data = await Sitio
+            .find({ categoria })
+            .skip(desde)
+            .limit(5)
+        //Crear un metodo para que valide que la fecha de lla licencia es valida
+        /*
+                                for (let i = 0; i < data.length; i++) {
+                            const element = data[i];
+                            //Validamos que sea de fecha menor
+                            if (element.licencia >= fecha) {
+                                dtoValidos.push(element);
+                            }
+                        }
+*             */
+        res.json({
+            ok: true,
+            sitios: this.data,
+            total: this.total
+        });
+    } catch (error) {
+
+        return res.status(400).json({
+            ok: false,
+            msg: 'La categoria tiene que ser de un sitios'
+        });
+    }
+}
+
 module.exports = {
     actualizarSitio,
     actualizarLicenciaSitio,
@@ -282,5 +327,6 @@ module.exports = {
     getSitio,
     getSitioByID,
     getSitioByNombre,
-    getSitioByUser
+    getSitioByUser,
+    getSitioByCategoria
 }

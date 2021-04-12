@@ -2,15 +2,15 @@ const { response } = require('express');
 const Talent = require('../models/talentModel');
 
 //Metodo de eliminar un Talent
-const getTalent = async(req, res = response) => {
+const getTalent = async (req, res = response) => {
     try {
         const desde = Number(req.query.desde) || 0;
 
         const [talents, total] = await Promise.all([
             Talent
-            .find({})
-            .skip(desde)
-            .limit(5),
+                .find({})
+                .skip(desde)
+                .limit(5),
 
             Talent.countDocuments()
         ]);
@@ -30,7 +30,7 @@ const getTalent = async(req, res = response) => {
         })
     }
 }
-const getTalentByID = async(req, res = response) => {
+const getTalentByID = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -56,7 +56,7 @@ const getTalentByID = async(req, res = response) => {
         })
     }
 }
-const getTalentByNombre = async(req, res = response) => {
+const getTalentByNombre = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, 'i');
 
@@ -81,41 +81,41 @@ const getTalentByNombre = async(req, res = response) => {
 }
 
 //Metodo para crear un Talent
-const crearTalent = async(req, res = response) => {
-        //lectura del body
-        const { nombreTalent } = req.body;
+const crearTalent = async (req, res = response) => {
+    //lectura del body
+    const { nombreTalent } = req.body;
 
-        try {
-            //verificando si existe un Talent registrado
-            const existeTalent = await Talent.findOne({ nombreTalent });
-            //validacion en caso que el Talent ya este registrado
-            if (existeTalent) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'El Talent ya está registrado'
-                });
-            }
-
-            const talentBD = new Talent(req.body);
-
-            // Guardar usuario
-            await talentBD.save();
-
-            res.json({
-                ok: true,
-                talent: talentBD
-            });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({
+    try {
+        //verificando si existe un Talent registrado
+        const existeTalent = await Talent.findOne({ nombreTalent });
+        //validacion en caso que el Talent ya este registrado
+        if (existeTalent) {
+            return res.status(400).json({
                 ok: false,
-                msg: 'Error inesperado... revisar logs'
+                msg: 'El Talent ya está registrado'
             });
         }
+
+        const talentBD = new Talent(req.body);
+
+        // Guardar usuario
+        await talentBD.save();
+
+        res.json({
+            ok: true,
+            talent: talentBD
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado... revisar logs'
+        });
     }
-    //Metodo de eliminar un Talent
-const actualizarTalent = async(req, res = response) => {
+}
+//Metodo de eliminar un Talent
+const actualizarTalent = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -166,7 +166,7 @@ const actualizarTalent = async(req, res = response) => {
  * @param {*} req 
  * @param {*} res 
  */
-const actualizarLicenciaTalent = async(req, res = response) => {
+const actualizarLicenciaTalent = async (req, res = response) => {
     const uid = req.params.id;
     console.log(req.body);
 
@@ -215,7 +215,7 @@ const actualizarLicenciaTalent = async(req, res = response) => {
 
 
 //Metodo de eliminar un Talent
-const borrarTalent = async(req, res = response) => {
+const borrarTalent = async (req, res = response) => {
     const uid = req.params.id;
 
     try {
@@ -247,6 +247,41 @@ const borrarTalent = async(req, res = response) => {
     }
 }
 
+//GEt Sitio by categoria
+const getTalentByCategoria = async (req, res = response) => {
+
+    const categoria = req.params.categoria;
+    const desde = Number(req.query.desde) || 0;
+
+    //const regex = new RegExp(busqueda, 'i');
+
+    let data = [];
+    let total = 0;
+
+    try {
+        this.data = await Talent
+            .find({ categoria })
+            .skip(desde)
+            .limit(5);
+        this.total = await Talent.find({ categoria }).countDocuments()
+
+        //Metodo para validar la 
+        //Metodo para validar la licencia
+        res.json({
+            ok: true,
+            talents: this.data,
+            total: this.total
+        })
+    } catch (error) {
+
+        return res.status(400).json({
+            ok: false,
+            msg: 'La categoria tiene que ser sitios'
+        });
+    }
+
+}
+
 module.exports = {
     actualizarTalent,
     actualizarLicenciaTalent,
@@ -254,5 +289,6 @@ module.exports = {
     crearTalent,
     getTalent,
     getTalentByID,
-    getTalentByNombre
+    getTalentByNombre,
+    getTalentByCategoria
 }
