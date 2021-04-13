@@ -6,10 +6,10 @@ const TallerSchema = Schema({
         type: String,
         required: true
     },
-    imgPrincipal: {
+    imgPrincipal: [{
         type: String,
         required: true
-    },
+    }],
     descripcion: {
         type: String,
         required: true

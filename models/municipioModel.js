@@ -6,34 +6,34 @@ const MunicipioSchema = Schema({
         type: String,
         required: true
     },
-    imgPrincipal: {
+    imgPrincipal: [{
         type: String,
         required: true
-    },
+    }],
     historia: {
         type: String,
     },
-    imgHistoria: {
+    imgHistoria: [{
         type: String
-    },
+    }],
     videoHistoria: {
         type: String
     },
     tradiciones: {
         type: String
     },
-    imgTradiciones: {
+    imgTradiciones: [{
         type: String
-    },
+    }],
     videoTradiciones: {
         type: String
     },
     cultura: {
         type: String,
     },
-    imgCultura: {
+    imgCultura: [{
         type: String
-    },
+    }],
     videoCultura: {
         type: String
     },
