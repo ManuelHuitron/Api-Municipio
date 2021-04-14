@@ -45,7 +45,7 @@ const getMunicipioByID = async (req, res = response) => {
 
         res.json({
             ok: true,
-            municpio: municipioBD
+            municipio: municipioBD
         });
 
     } catch (error) {
