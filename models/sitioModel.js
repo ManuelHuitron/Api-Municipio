@@ -10,6 +10,10 @@ const SitioSchema = Schema({
         type: String,
         required: true
     }],
+    statuslicencia:{
+        type: Boolean,
+        default: true
+    },
     video: {
         type: String
     },

@@ -10,6 +10,10 @@ const TalentSchema = Schema({
         type: String,
         required: true
     }],
+    statuslicencia:{
+        type: Boolean,
+        default: true
+    },
     descripcion: {
         type: String
     },
